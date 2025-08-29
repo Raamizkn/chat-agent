@@ -16,340 +16,99 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    
-    .chat-container {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 600px;
-      height: 70vh;
-      display: flex;
       flex-direction: column;
-      overflow: hidden;
-    }
-    
-    .chat-header {
-      background: #4f46e5;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: 600;
-    }
-    
-    .chat-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-    }
-    
-    .message {
-      margin-bottom: 16px;
-      display: flex;
-      align-items: flex-start;
-      animation: slideIn 0.3s ease-out;
-    }
-    
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .message.user {
-      justify-content: flex-end;
-    }
-    
-    .message-bubble {
-      max-width: 80%;
-      padding: 12px 16px;
-      border-radius: 18px;
-      word-wrap: break-word;
-      line-height: 1.4;
-    }
-    
-    .user .message-bubble {
-      background: #4f46e5;
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-    
-    .bot .message-bubble {
-      background: #f3f4f6;
-      color: #374151;
-      border-bottom-left-radius: 4px;
-    }
-    
-    .chat-input {
-      display: flex;
-      padding: 20px;
-      border-top: 1px solid #e5e7eb;
-      gap: 12px;
-    }
-    
-    #messageInput {
-      flex: 1;
-      padding: 12px 16px;
-      border: 2px solid #e5e7eb;
-      border-radius: 24px;
-      outline: none;
-      font-size: 14px;
-      transition: border-color 0.2s;
-    }
-    
-    #messageInput:focus {
-      border-color: #4f46e5;
-    }
-    
-    #sendButton {
-      background: #4f46e5;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      cursor: pointer;
-      display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      padding: 20px;
     }
     
-    #sendButton:hover:not(:disabled) {
-      background: #4338ca;
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
     }
     
-    #sendButton:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
-    .loading {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #6b7280;
-      font-style: italic;
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      font-weight: 300;
     }
     
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #6b7280;
-      animation: pulse 1.4s infinite ease-in-out both;
+    .widget-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      padding: 40px;
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
     }
     
-    .dot:nth-child(1) { animation-delay: -0.32s; }
-    .dot:nth-child(2) { animation-delay: -0.16s; }
-    
-    @keyframes pulse {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
+    .instructions {
+      margin-bottom: 30px;
+      color: #4b5563;
+      font-size: 16px;
+      line-height: 1.6;
     }
     
-    .error-message {
-      background: #fef2f2;
-      color: #dc2626;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 16px 0;
-      font-size: 14px;
+    .instructions h2 {
+      color: #1f2937;
+      margin-bottom: 16px;
+      font-size: 24px;
     }
     
     @media (max-width: 640px) {
-      .chat-container {
-        height: 80vh;
-        margin: 0;
-        border-radius: 0;
+      .header h1 {
+        font-size: 2rem;
       }
       
-      .message-bubble {
-        max-width: 85%;
+      .header p {
+        font-size: 1rem;
+      }
+      
+      .widget-container {
+        padding: 20px;
+        margin: 0 10px;
+      }
+      
+      .instructions {
+        font-size: 14px;
+      }
+      
+      .instructions h2 {
+        font-size: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      Retell AI Chat Agent
-    </div>
-    
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">
-        <div class="message-bubble">
-          Hi! I'm your AI assistant. How can I help you today?
-        </div>
-      </div>
-    </div>
-    
-    <div class="chat-input">
-      <input 
-        id="messageInput" 
-        type="text" 
-        placeholder="Type your message..." 
-        autofocus
-      />
-      <button id="sendButton" type="button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-        </svg>
-      </button>
+  <div class="header">
+    <h1>Retell AI Chat Agent</h1>
+    <p>Experience intelligent conversation with our AI assistant</p>
+  </div>
+  
+  <div class="widget-container">
+    <div class="instructions">
+      <h2>Chat with our AI Assistant</h2>
+      <p>Click the chat widget below to start a conversation. Our AI assistant is ready to help you with your questions and provide intelligent responses.</p>
     </div>
   </div>
 
-  <script>
-    const chatMessages = document.getElementById('chatMessages');
-    const messageInput = document.getElementById('messageInput');
-    const sendButton = document.getElementById('sendButton');
-    
-    // Replace with your actual n8n webhook URL
-    const WEBHOOK_URL = 'https://n8n.ncrese.com/webhook/chatbot-test';
-    
-    let isLoading = false;
-    
-    function addMessage(content, isUser = false) {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-      
-      const bubbleDiv = document.createElement('div');
-      bubbleDiv.className = 'message-bubble';
-      bubbleDiv.textContent = content;
-      
-      messageDiv.appendChild(bubbleDiv);
-      chatMessages.appendChild(messageDiv);
-      
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    
-    function showLoading() {
-      const loadingDiv = document.createElement('div');
-      loadingDiv.className = 'message bot loading-message';
-      loadingDiv.innerHTML = `
-        <div class="message-bubble loading">
-          <span>AI is typing</span>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-      `;
-      chatMessages.appendChild(loadingDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      return loadingDiv;
-    }
-    
-    function removeLoading() {
-      const loadingMessage = chatMessages.querySelector('.loading-message');
-      if (loadingMessage) {
-        loadingMessage.remove();
-      }
-    }
-    
-    function showError(message) {
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'error-message';
-      errorDiv.textContent = `Error: ${message}`;
-      chatMessages.appendChild(errorDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    
-    async function sendMessage() {
-      const message = messageInput.value.trim();
-      if (!message || isLoading) return;
-      
-      // Add user message
-      addMessage(message, true);
-      messageInput.value = '';
-      
-      // Set loading state
-      isLoading = true;
-      sendButton.disabled = true;
-      const loadingElement = showLoading();
-      
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ 
-            message: message,
-            timestamp: new Date().toISOString()
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        
-        // Remove loading indicator
-        removeLoading();
-        
-        // Add bot response
-        const botReply = data.reply || data.response || data.message || 'No response received';
-        addMessage(botReply);
-        
-      } catch (error) {
-        console.error('Error sending message:', error);
-        removeLoading();
-        showError(error.message || 'Failed to send message. Please try again.');
-      } finally {
-        // Reset loading state
-        isLoading = false;
-        sendButton.disabled = false;
-        messageInput.focus();
-      }
-    }
-    
-    // Event listeners
-    sendButton.addEventListener('click', sendMessage);
-    
-    messageInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        sendMessage();
-      }
-    });
-    
-    // Focus input on page load
-    messageInput.focus();
-    
-    // Optional: Add connection test on page load
-    window.addEventListener('load', function() {
-      console.log('Retell AI Chat Agent loaded');
-      console.log('Webhook URL:', WEBHOOK_URL);
-      
-      // You can add a connection test here if needed
-      // testConnection();
-    });
-    
-    // Optional: Test webhook connection
-    async function testConnection() {
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ test: true })
-        });
-        
-        if (response.ok) {
-          console.log('✅ Webhook connection successful');
-        } else {
-          console.warn('⚠️ Webhook connection issue:', response.status);
-        }
-      } catch (error) {
-        console.error('❌ Webhook connection failed:', error.message);
-      }
-    }
-  </script>
+  <script
+    id="retell-widget"
+    src="https://dashboard.retellai.com/retell-widget.js"
+    type="module"
+    data-public-key="public_key_d6d064d14935abd74c2f9"
+    data-agent-id="agent_81ad1e333429290bc66f3d0674"
+    data-title="AI Assistant"
+    data-color="#4f46e5"
+  ></script>
 </body>
 </html>
